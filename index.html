@@ -1,0 +1,1312 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Онлайн администрации</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #080808;
+  --panel: rgba(20, 20, 20, .72);
+  --panel-2: rgba(255, 255, 255, .045);
+  --border: rgba(255, 149, 0, .16);
+
+  --orange: #ff9500;
+  --orange-light: #ffb347;
+  --green: #2ecc71;
+  --red: #ff4d4d;
+  --yellow: #ffd166;
+
+  --text: #fff;
+  --muted: #958b7c;
+
+  --radius: 20px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Inter, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255,149,0,.12), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(255,179,71,.07), transparent 25%),
+    radial-gradient(circle at 50% 100%, rgba(255,149,0,.05), transparent 35%),
+    #080808;
+  overflow-x: hidden;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.bg-glow {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(255,149,0,.07);
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.bg-glow.one {
+  top: -250px;
+  left: -150px;
+}
+
+.bg-glow.two {
+  right: -250px;
+  top: 40%;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  padding: 45px 0 30px;
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  width: 58px;
+  height: 58px;
+  border-radius: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+  font-weight: 800;
+
+  color: #15100a;
+
+  background: linear-gradient(
+    135deg,
+    #ff9500,
+    #ffb347
+  );
+
+  box-shadow:
+    0 10px 35px rgba(255,149,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+.title h1 {
+  font-size: clamp(28px, 5vw, 46px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -1.8px;
+
+  background: linear-gradient(
+    90deg,
+    #fff,
+    #ffb347
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.title p {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.month-badge {
+  padding: 11px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255,149,0,.06);
+  color: #ffc98a;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  position: relative;
+  overflow: hidden;
+
+  padding: 20px;
+  border-radius: var(--radius);
+
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,.07);
+
+  backdrop-filter: blur(18px);
+
+  transition: .25s ease;
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,149,0,.25);
+}
+
+.stat::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  right: -40px;
+  bottom: -50px;
+  border-radius: 50%;
+  background: rgba(255,149,0,.08);
+  filter: blur(20px);
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+}
+
+.stat-value.orange {
+  color: var(--orange);
+}
+
+.stat-sub {
+  color: #6f675d;
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.search {
+  position: relative;
+  flex: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #756b60;
+  font-size: 15px;
+}
+
+.search input,
+.filter select {
+  width: 100%;
+  height: 46px;
+
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 13px;
+
+  background: rgba(255,255,255,.045);
+  color: #fff;
+
+  outline: none;
+
+  padding: 0 15px;
+  font-family: inherit;
+
+  transition: .2s;
+}
+
+.search input {
+  padding-left: 43px;
+}
+
+.search input:focus,
+.filter select:focus {
+  border-color: rgba(255,149,0,.45);
+  box-shadow: 0 0 0 3px rgba(255,149,0,.06);
+}
+
+.search input::placeholder {
+  color: #625b52;
+}
+
+.filter {
+  width: 210px;
+}
+
+.filter select option {
+  background: #171717;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap {
+  border-radius: var(--radius);
+  overflow: hidden;
+
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,.07);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.3);
+}
+
+.table-head {
+  padding: 20px 22px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.table-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.online {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #72dc9a;
+  font-size: 12px;
+}
+
+.online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+
+  box-shadow: 0 0 12px var(--green);
+
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .35; }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: rgba(255,255,255,.025);
+}
+
+th {
+  padding: 14px 20px;
+  text-align: left;
+
+  color: #756b60;
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+
+th:first-child,
+td:first-child {
+  width: 65px;
+  text-align: center;
+}
+
+tbody tr {
+  border-top: 1px solid rgba(255,255,255,.045);
+  transition: .2s;
+}
+
+tbody tr:hover {
+  background: rgba(255,149,0,.045);
+}
+
+td {
+  padding: 16px 20px;
+}
+
+/* =========================
+   RANK
+========================= */
+
+.rank {
+  font-size: 15px;
+  font-weight: 800;
+  color: #625b52;
+}
+
+.rank.top {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: rgba(255,149,0,.08);
+}
+
+.rank.gold {
+  color: #ffd700;
+  background: rgba(255,215,0,.1);
+}
+
+.rank.silver {
+  color: #d4d4d4;
+  background: rgba(210,210,210,.08);
+}
+
+.rank.bronze {
+  color: #cd7f32;
+  background: rgba(205,127,50,.08);
+}
+
+/* =========================
+   USER
+========================= */
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,149,0,.9),
+      rgba(255,179,71,.9)
+    );
+
+  color: #17100a;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  box-shadow:
+    0 5px 20px rgba(255,149,0,.12);
+}
+
+.nick {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.role {
+  margin-top: 4px;
+  color: #ff9d24;
+  font-size: 11px;
+}
+
+/* =========================
+   HOURS
+========================= */
+
+.hours-cell {
+  min-width: 330px;
+}
+
+.hours-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 8px;
+}
+
+.hours {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.goal {
+  color: #71675b;
+  font-size: 11px;
+}
+
+.progress {
+  width: 100%;
+  height: 7px;
+
+  border-radius: 999px;
+  overflow: hidden;
+
+  background: rgba(255,255,255,.07);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    #ff9500,
+    #ffb347
+  );
+
+  box-shadow: 0 0 12px rgba(255,149,0,.25);
+
+  transition: width .8s cubic-bezier(.22,1,.36,1);
+}
+
+.progress-fill.complete {
+  background: linear-gradient(
+    90deg,
+    #24b96f,
+    #50e890
+  );
+
+  box-shadow: 0 0 12px rgba(46,204,113,.25);
+}
+
+.progress-fill.low {
+  background: linear-gradient(
+    90deg,
+    #ff4d4d,
+    #ff7676
+  );
+}
+
+/* =========================
+   PERCENT
+========================= */
+
+.percent {
+  margin-top: 6px;
+  color: #777066;
+  font-size: 10px;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty {
+  display: none;
+  text-align: center;
+  padding: 55px 20px;
+  color: #756b60;
+}
+
+.empty-icon {
+  font-size: 35px;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  padding: 28px 0 40px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #514b44;
+  font-size: 11px;
+}
+
+.footer-status {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.footer-status span {
+  color: #6e665d;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+.fade {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: appear .55s forwards;
+}
+
+@keyframes appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 850px) {
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hours-cell {
+    min-width: 250px;
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  body {
+    padding: 0 0;
+  }
+
+  .container {
+    width: min(100% - 20px, 1200px);
+  }
+
+  header {
+    padding-top: 25px;
+  }
+
+  .header-top {
+    align-items: flex-start;
+  }
+
+  .month-badge {
+    display: none;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 20px;
+  }
+
+  .title h1 {
+    font-size: 28px;
+  }
+
+  .title p {
+    font-size: 12px;
+  }
+
+  .stats {
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .stat-value {
+    font-size: 22px;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .filter {
+    width: 100%;
+  }
+
+  .table-wrap {
+    border-radius: 16px;
+  }
+
+  .table-head {
+    padding: 17px;
+  }
+
+  table,
+  tbody,
+  tr,
+  td {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    position: relative;
+    padding: 15px;
+  }
+
+  td {
+    padding: 0;
+  }
+
+  td:first-child {
+    position: absolute;
+    top: 17px;
+    right: 15px;
+    width: auto;
+  }
+
+  td:nth-child(2) {
+    margin-bottom: 15px;
+  }
+
+  .hours-cell {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .avatar {
+    width: 43px;
+    height: 43px;
+  }
+
+  footer {
+    padding-bottom: 25px;
+  }
+
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #302a24;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4035;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-glow one"></div>
+<div class="bg-glow two"></div>
+
+<div class="container">
+
+<header class="fade">
+
+  <div class="header-top">
+
+    <div class="logo-area">
+
+      <div class="logo">A</div>
+
+      <div class="title">
+        <h1>Онлайн администрации</h1>
+        <p id="subtitle">Статистика состава</p>
+      </div>
+
+    </div>
+
+    <div class="month-badge" id="monthBadge"></div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     STATISTICS
+========================= -->
+
+<section class="stats fade">
+
+  <div class="stat">
+    <div class="stat-label">Состав администрации</div>
+    <div class="stat-value" id="staffCount">0</div>
+    <div class="stat-sub">человек в составе</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Общий онлайн</div>
+    <div class="stat-value orange" id="totalHours">0 ч</div>
+    <div class="stat-sub">за текущий месяц</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Средний онлайн</div>
+    <div class="stat-value" id="averageHours">0 ч</div>
+    <div class="stat-sub">на администратора</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Выполнили норму</div>
+    <div class="stat-value" id="completedCount">0</div>
+    <div class="stat-sub">из текущего состава</div>
+  </div>
+
+</section>
+
+
+<!-- =========================
+     CONTROLS
+========================= -->
+
+<div class="controls fade">
+
+  <div class="search">
+    <span class="search-icon">⌕</span>
+    <input
+      id="search"
+      type="text"
+      placeholder="Поиск администратора..."
+      autocomplete="off"
+    >
+  </div>
+
+  <div class="filter">
+    <select id="roleFilter">
+      <option value="all">Все должности</option>
+    </select>
+  </div>
+
+</div>
+
+
+<!-- =========================
+     TABLE
+========================= -->
+
+<div class="table-wrap fade">
+
+  <div class="table-head">
+
+    <div class="table-title">
+      Таблица активности
+    </div>
+
+    <div class="online">
+      <span class="online-dot"></span>
+      Система активна
+    </div>
+
+  </div>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Администратор</th>
+        <th>Отыграно за месяц</th>
+      </tr>
+    </thead>
+
+    <tbody id="tableBody"></tbody>
+
+  </table>
+
+  <div class="empty" id="empty">
+    <div class="empty-icon">⌕</div>
+    Администратор не найден
+  </div>
+
+</div>
+
+
+<footer>
+
+  <div>
+    © Онлайн администрации
+  </div>
+
+  <div class="footer-status">
+    <span>Последнее обновление:</span>
+    <span id="updateTime">сейчас</span>
+  </div>
+
+</footer>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   ⚙️ КОНФИГУРАЦИЯ
+   МЕНЯЙ ДАННЫЕ ТОЛЬКО ЗДЕСЬ
+============================================================ */
+
+const MONTH = "Октябрь 2026";
+
+const GOAL_HOURS = 30;
+
+const STAFF = [
+
+  {
+    name: "yaroslav5880",
+    role: "Основатель",
+    hours: 0
+  },
+
+  {
+    name: "turey_official",
+    role: "Заместитель",
+    hours: 0
+  },
+
+  {
+    name: "fenixpro33",
+    role: "Главный администратор",
+    hours: 0
+  },
+
+  {
+    name: "runik_34",
+    role: "Главный администратор",
+    hours: 0
+  },
+
+  {
+    name: "woxxie1",
+    role: "Модератор",
+    hours: 0
+  },
+
+  {
+    name: "simoc3k_69173",
+    role: "Модератор",
+    hours: 0
+  }
+
+];
+
+
+/* ============================================================
+   ELEMENTS
+============================================================ */
+
+const tableBody = document.getElementById("tableBody");
+const searchInput = document.getElementById("search");
+const roleFilter = document.getElementById("roleFilter");
+const empty = document.getElementById("empty");
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+document.getElementById("subtitle").textContent =
+  `Статистика состава · ${MONTH}`;
+
+document.getElementById("monthBadge").textContent =
+  MONTH;
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function initials(name) {
+
+  const clean = name
+    .replace(/[^a-zA-Zа-яА-Я0-9]/g, "");
+
+  return clean
+    .substring(0, 2)
+    .toUpperCase();
+}
+
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+function getRankClass(index) {
+
+  if (index === 0) return "gold";
+  if (index === 1) return "silver";
+  if (index === 2) return "bronze";
+
+  return "";
+}
+
+
+function getProgressClass(percent) {
+
+  if (percent >= 100) return "complete";
+  if (percent < 60) return "low";
+
+  return "";
+}
+
+
+/* ============================================================
+   SORT
+============================================================ */
+
+let sortedStaff = [...STAFF].sort(
+  (a, b) => b.hours - a.hours
+);
+
+
+/* ============================================================
+   STATISTICS
+============================================================ */
+
+function updateStatistics() {
+
+  const total = STAFF.reduce(
+    (sum, person) => sum + person.hours,
+    0
+  );
+
+  const average = STAFF.length
+    ? Math.round(total / STAFF.length)
+    : 0;
+
+  const completed = STAFF.filter(
+    person => person.hours >= GOAL_HOURS
+  ).length;
+
+
+  document.getElementById("staffCount")
+    .textContent = STAFF.length;
+
+  document.getElementById("totalHours")
+    .textContent = `${total.toLocaleString("ru-RU")} ч`;
+
+  document.getElementById("averageHours")
+    .textContent = `${average} ч`;
+
+  document.getElementById("completedCount")
+    .textContent = completed;
+}
+
+
+/* ============================================================
+   ROLES
+============================================================ */
+
+function buildRoleFilter() {
+
+  const roles = [
+    ...new Set(
+      STAFF.map(person => person.role)
+    )
+  ];
+
+  roles.forEach(role => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = role;
+    option.textContent = role;
+
+    roleFilter.appendChild(option);
+
+  });
+
+}
+
+
+/* ============================================================
+   RENDER
+============================================================ */
+
+function render() {
+
+  const query =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  const selectedRole =
+    roleFilter.value;
+
+
+  const filtered = sortedStaff.filter(person => {
+
+    const matchesSearch =
+      person.name
+        .toLowerCase()
+        .includes(query);
+
+    const matchesRole =
+      selectedRole === "all" ||
+      person.role === selectedRole;
+
+    return matchesSearch && matchesRole;
+
+  });
+
+
+  tableBody.innerHTML = "";
+
+
+  filtered.forEach((person, index) => {
+
+    const percent = Math.min(
+      100,
+      Math.round(
+        (person.hours / GOAL_HOURS) * 100
+      )
+    );
+
+
+    const rankClass =
+      getRankClass(index);
+
+    const progressClass =
+      getProgressClass(percent);
+
+
+    const tr =
+      document.createElement("tr");
+
+
+    tr.innerHTML = `
+
+      <td>
+
+        <span class="
+          rank
+          ${rankClass ? "top " + rankClass : ""}
+        ">
+
+          ${index + 1}
+
+        </span>
+
+      </td>
+
+
+      <td>
+
+        <div class="user">
+
+          <div class="avatar">
+
+            ${initials(
+              escapeHTML(person.name)
+            )}
+
+          </div>
+
+          <div>
+
+            <div class="nick">
+
+              ${escapeHTML(person.name)}
+
+            </div>
+
+            <div class="role">
+
+              ${escapeHTML(person.role)}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </td>
+
+
+      <td class="hours-cell">
+
+        <div class="hours-info">
+
+          <span class="hours">
+
+            ${person.hours.toLocaleString("ru-RU")} ч
+
+          </span>
+
+          <span class="goal">
+
+            ${percent}% от ${GOAL_HOURS} ч
+
+          </span>
+
+        </div>
+
+
+        <div class="progress">
+
+          <div
+            class="progress-fill ${progressClass}"
+            style="width: ${percent}%"
+          ></div>
+
+        </div>
+
+
+        <div class="percent">
+
+          ${
+            percent >= 100
+              ? "Норма выполнена"
+              : `Осталось ${
+                  Math.max(
+                    0,
+                    GOAL_HOURS - person.hours
+                  )
+                } ч до нормы`
+          }
+
+        </div>
+
+      </td>
+
+    `;
+
+
+    tableBody.appendChild(tr);
+
+  });
+
+
+  empty.style.display =
+    filtered.length
+      ? "none"
+      : "block";
+
+}
+
+
+/* ============================================================
+   EVENTS
+============================================================ */
+
+searchInput.addEventListener(
+  "input",
+  render
+);
+
+roleFilter.addEventListener(
+  "change",
+  render
+);
+
+
+/* ============================================================
+   INIT
+============================================================ */
+
+updateStatistics();
+
+buildRoleFilter();
+
+render();
+
+
+/* ============================================================
+   UPDATE TIME
+============================================================ */
+
+const now = new Date();
+
+document.getElementById("updateTime")
+  .textContent =
+    now.toLocaleTimeString(
+      "ru-RU",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+</script>
+
+</body>
+</html>
+```
